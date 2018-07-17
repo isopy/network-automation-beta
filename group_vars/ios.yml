@@ -1,0 +1,11 @@
+---
+# general
+ansible_network_os: ios
+
+# base_config
+base_config_logging_buffered: 15000
+base_config_system_mtu: 1500
+base_config_ip_domain_name: "mjdomain.com"
+
+# this would be supplied via a Tower survey
+bgp_neighbor_ip: 1.1.1.2

@@ -1,0 +1,15 @@
+ip route {{ neighbor_ip }} {{ loop_int_mask }} {{ neighbor_1_ip }}
+interface {{ phys_int_name }}
+  description {{ int_description }}
+  no switchport
+  ip address {{ phys_int_ip }}  {{ phys_int_mask }}
+!
+interface {{ loop_int_name }}
+  ip address {{ loop_int_ip }} {{ loop_int_mask }}
+!
+router bgp {{ local_as_id }}
+  bgp router-id {{ loop_int_ip }}
+  neighbor {{ neighbor_ip }} remote-as {{ remote_as_id }}
+  neighbor {{ neighbor_ip }} ebgp-multihop 3
+  neighbor {{ neighbor_ip }} update-source {{ loop_int_name }}
+  neighbor {{ neighbor_ip }} activate

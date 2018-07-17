@@ -1,0 +1,10 @@
+---
+- name: template base config
+  ios_config:
+    src: base_config.j2
+
+- name: Configure banner from file
+  ios_banner:
+    banner:  login
+    text: "{{ lookup('file', '../files/banner.cfg') }}"
+    state: present
