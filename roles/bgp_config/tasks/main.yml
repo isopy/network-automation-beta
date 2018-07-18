@@ -1,46 +1,18 @@
----
+- name: Define Values From CSV File
+  set_fact:
+    int_description: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=1') }}"
+    password: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=2') }}"
+    phys_int_name: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=3') }}"
+    phys_int_ip: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=4') }}"
+    phys_int_mask: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=5') }}"
+    loop_int_name: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=6') }}"
+    loop_int_ip: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=7') }}"
+    loop_int_mask: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=8') }}"
+    local_as_id: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=9') }}"
+    neighbor_ip: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=10') }}"
+    remote_as_id: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=11') }}"
+    neighbor_1_ip: "{{ lookup('csvfile', bgp_neighbor_ip+' file=mjdoc.csv delimiter=, col=12') }}"
 
-
-# - debug:
-#     msg: "{{lookup('template', 'ifs_config.j2')}}"
-#   vars:
-#     phys_int_name: "{{loopback_ifs_name}}"
-#     int_description: "IOS DESCRIPTION"
-#     phys_int_ip: "{{loopback_ifs_ip}}"
-#     phys_int_mask: "{{loopback_ifs_netmask}}"
-#     loopback: True
-
-- name: configure lo interfaces
+- name: land the config
   ios_config:
-    src: ifs_config.j2
-  vars:
-    phys_int_name: "{{loopback_ifs_name}}"
-    int_description: "IOS DESCRIPTION"
-    phys_int_ip: "{{loopback_ifs_ip}}"
-    phys_int_mask: "{{loopback_ifs_netmask}}"
-    loopback: True
-
-- name: configure interfaces
-  ios_config:
-    src: ifs_config.j2
-  vars:
-    phys_int_name: "{{item.name}}"
-    int_description: "IOS DESCRIPTION"
-    phys_int_ip: "{{item.ip}}"
-    phys_int_mask: "{{bgp_netmask}}"
-    loopback: False
-  with_items: "{{ifs_list}}"
-
-- name: configure bgp
-  ios_config:
-    src: bgp_config.j2
-  vars:
-    local_as_id: "{{bgp_config.as}}"
-    loop_int_ip: "{{loopback_ifs_ip}}"
-    neighbor_ip: "{{hostvars[item.bgp_neighbor].loopback_ifs_ip}}"
-    remote_as_id: "{{hostvars[item.bgp_neighbor].bgp_config.as}}"
-    loop_int_name: "{{loopback_ifs_name}}"
-    loop_int_mask: "{{loopback_ifs_netmask}}"
-    neighbor_dict: "{{hostvars[item.bgp_neighbor].ifs_list | selectattr('bgp_neighbor', 'equalto', inventory_hostname) | first}}"
-    neighbor_1_ip: "{{ neighbor_dict.ip}}"
-  with_items: "{{ifs_list}}"
+    src: bgp_template.j2
