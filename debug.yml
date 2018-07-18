@@ -1,0 +1,20 @@
+---
+
+
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: configure bgp
+    debug:
+      msg: "{{ neighbor_dict['ip']  }}"
+    vars:
+      neighbor_dict: "{{hostvars[item.bgp_neighbor].ifs_list | selectattr('bgp_neighbor', 'equalto', inventory_hostname) | first}}"
+    # vars:
+    #   local_as_id: "{{bgp_config.as}}"
+    #   loop_int_ip: "{{loopback_ifs_ip}}"
+    #   neighbor_ip: "{{hostvars[item.bgp_neighbor].loopback_ifs_ip}}"
+    #   remote_as_id: "{{hostvars[item.bgp_neighbor].bgp_config.as}}"
+    #   loop_int_name: "{{loopback_ifs_name}}"
+    #   loop_int_mask: "{{loopback_ifs_netmask}}"
+    #   neighbor_1_ip: "{{ (hostvars[item.bgp_neighbor].ifs_list | selectattr('bgp_neighbor', 'equalto', inventory_hostbame) | list)[0].ip}}"
+    with_items: "{{ifs_list}}"

@@ -1,0 +1,7 @@
+interface {{ phys_int_name }}
+  description "{{ int_description }}"
+  {% if not (loopback | default(false)) -%}
+  no switchport
+  {% endif -%}
+  ip address {{ phys_int_ip }}  {{ phys_int_mask }}
+!

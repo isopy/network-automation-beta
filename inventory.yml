@@ -1,0 +1,69 @@
+---
+
+ios:
+  hosts:
+    r1:
+      ansible_ssh_host: 192.168.161.128
+      loopback_ifs_ip: 1.1.1.1
+      ifs_list:
+        - name: FastEthernet0/2
+          ip: 10.1.1.1
+          bgp_neighbor: r2
+          description: TEST_DESC
+          netmask: 255.255.255.252
+        - name: FastEthernet0/3
+          ip: 10.1.4.1
+          bgp_neighbor: r3
+      bgp_config:
+        as: 100
+
+    r2:
+      ansible_ssh_host: 192.168.161.14
+      loopback_ifs_netmask: 255.255.255.255
+      loopback_ifs_ip: 1.1.1.2
+      ifs_list:
+        - name: FastEthernet0/2
+          ip: 10.1.4.2
+          bgp_neighbor: r1
+        - name: FastEthernet0/3
+          ip: 10.1.3.2
+          bgp_neighbor: r4
+      bgp_config:
+        as: 200
+    r3:
+      ansible_ssh_host: 192.168.161.15
+      loopback_ifs_netmask: 255.255.255.255
+      loopback_ifs_ip: 1.1.1.3
+      ifs_list:
+        - name: FastEthernet0/2
+          ip: 10.1.2.1
+          bgp_neighbor: r4
+        - name: FastEthernet0/3
+          ip: 10.1.1.2
+          bgp_neighbor: r1
+      bgp_config:
+        as: 300
+    r4:
+      ansible_ssh_host: 192.168.161.88
+      loopback_ifs_netmask: 255.255.255.255
+      loopback_ifs_ip: 1.1.1.4
+      ifs_list:
+        - name: FastEthernet0/2
+          ip: 10.1.2.2
+          bgp_neighbor: r3
+        - name: FastEthernet0/3
+          ip: 10.1.3.1
+          bgp_neighbor: r2
+      bgp_config:
+        as: 400
+  vars:
+    ansible_ssh_pass: cisco
+    ansible_become_pass: cisco
+    ansible_user: pi
+    ansible_network_os: ios
+    ansible_connection: network_cli
+    ansible_become: yes
+    ansible_become_method: enable
+    loopback_ifs_name: Loopback0
+    loopback_ifs_netmask: 255.255.255.255
+    bgp_netmask: 255.255.255.252
