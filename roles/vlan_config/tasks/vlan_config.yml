@@ -1,0 +1,12 @@
+---
+
+- ios_command:
+    commands: show vlan id {{item.id}}
+  register: vlan_exists
+  ignore_errors: yes
+
+- ios_config:
+    lines:
+    - "name {{item.desc}}"
+    parents: "vlan {{item.id}}"
+  when: vlan_exists.failed

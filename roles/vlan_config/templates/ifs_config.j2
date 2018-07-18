@@ -3,13 +3,7 @@ interface {{ phys_int_name }}
   {% if not (switchport | default(false)) -%}
   no switchport
   {% else %}
-  {# enable switchport on interface switch from L3 -> L2 #}
-  switchport
-  {# change from dynamic desirable to access mode #}
   switchport mode access
-  {% if vlan is defined %}
-  switchport access {{vlan}}
-  {% endif %}
   {% endif -%}
   ip address {{ phys_int_ip }}  {{ phys_int_mask }}
 !
