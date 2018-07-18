@@ -1,0 +1,7 @@
+router bgp {{ local_as_id }}
+  bgp router-id {{ loop_int_ip }}
+  neighbor {{ neighbor_ip }} remote-as {{ remote_as_id }}
+  neighbor {{ neighbor_ip }} ebgp-multihop 3
+  neighbor {{ neighbor_ip }} update-source {{ loop_int_name }}
+  neighbor {{ neighbor_ip }} activate
+ip route {{ neighbor_ip }} {{ loop_int_mask }} {{ neighbor_1_ip }}
