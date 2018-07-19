@@ -1,0 +1,40 @@
+---
+- hosts: nxos
+  gather_facts: false
+  roles:
+    - ansible-network.network-engine
+
+  tasks:
+
+    - name: include snow vars
+      include_vars: incident_vars.yml
+
+    - name: show nxos version
+      nxos_command:
+        commands:
+          - show version
+      register: version
+
+    - name: parse show nxos_version
+      command_parser:
+        file: "parsers/show_nxos_version.yml"
+        content: "{{ version.stdout.0 }}"
+
+    - name: update a snow record
+      snow_record:
+        username: "{{ username }}"
+        password: "{{ password }}"
+        instance: "{{ instance }}"
+        number: INC0010007
+        table: "{{ table }}"
+        state: "{{ state }}"
+        data:
+          priority: "{{ priority }}"
+          severity: "{{ severity }}"
+          category: "{{ category }}"
+          u_uptime: "{{ system_facts['uptime'] }}"
+          u_version: "{{ system_facts['version'] }}"
+      register: new_inc_request
+
+    - debug:
+        var: new_inc_request

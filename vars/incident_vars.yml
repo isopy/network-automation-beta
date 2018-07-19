@@ -1,0 +1,11 @@
+---
+username: admin
+password: Redhat1!
+instance: dev41539
+state: present
+
+short_description: "Test ticket open by Michael via Ansible"
+priority: 2
+severity: 2
+category: "network"
+table: incident

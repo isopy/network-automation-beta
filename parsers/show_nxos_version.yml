@@ -1,0 +1,42 @@
+---
+- name: parser meta data
+  parser_metadata:
+    version: 1.0
+    command: show version
+    network_os: nxos
+
+- name: match version
+  pattern_match:
+    regex: "System version: (.+)"
+  register: version
+
+- name: match model
+  pattern_match:
+    regex: "cisco (.+) Chassis"
+  register: model
+
+- name: match image
+  pattern_match:
+    regex: "system image file is: (.+)"
+  register: image
+
+- name: match uptime
+  pattern_match:
+    regex: "Kernel uptime is (.+)"
+  register: uptime
+
+- name: match total memory
+  pattern_match:
+    regex: "with (.+) kB of memory"
+  register: total_mem
+
+- name: export system facts to playbook
+  set_vars:
+    model: "{{ model.matches.0 }}"
+    image_file: "{{ image.matches.0 }}"
+    uptime: "{{ uptime.matches.0 }}"
+    version: "{{ version.matches.0 }}"
+    memory:
+      total: "{{ total_mem.matches.0 }}"
+  export: yes
+  register: system_facts
