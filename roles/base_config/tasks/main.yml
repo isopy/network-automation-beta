@@ -8,3 +8,5 @@
     banner:  login
     text: "{{ lookup('file', '../files/banner.cfg') }}"
     state: present
+
+###
