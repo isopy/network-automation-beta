@@ -12,8 +12,6 @@ ios:
         - name: FastEthernet0/3
           netmask: 255.255.255.0
           trunk_vlans: [10,20,30,40]
-          
-        - name: FastEthernet0/4
   vars:
     ansible_ssh_pass: cisco
     ansible_become_pass: cisco

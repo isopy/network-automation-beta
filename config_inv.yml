@@ -4,9 +4,10 @@
   gather_facts: false
 
   tasks:
-    # - name: execute base_config role
-    #   include_role:
-    #     name: base_config
+    
+    - name: execute base_config role
+      include_role:
+        name: base_config
 
     - name: configure vlan
       include_role:

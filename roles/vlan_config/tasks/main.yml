@@ -4,12 +4,12 @@
   include_tasks: vlan_config.yml
   with_items: "{{ vlans | default([]) }}"
 
-- name: configure interfaces to trunk mode
+- name: configure interfaces to trunk mode {{item.name}}
   ios_config:
     lines:
-    - switchport
-    - switchport trunk encapsulation dot1q
-    - switchport mode trunk
+    - "switchport"
+    - "switchport trunk encapsulation dot1q"
+    - "switchport mode trunk"
     - "switchport trunk allowed vlan {{ item.trunk_vlans | join(',') }}"
     parents: "interface {{ item.name }}"
   with_items: "{{ ifs_list | default([])}}"
