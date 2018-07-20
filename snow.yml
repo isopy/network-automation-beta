@@ -20,6 +20,9 @@
         file: "parsers/show_nxos_version.yml"
         content: "{{ version.stdout.0 }}"
 
+    - debug:
+        var: system_facts
+
     - name: update a snow record
       snow_record:
         username: "{{ username }}"
@@ -34,7 +37,5 @@
           category: "{{ category }}"
           u_uptime: "{{ system_facts['uptime'] }}"
           u_version: "{{ system_facts['version'] }}"
+          comments: "{{ system_facts }}"
       register: new_inc_request
-
-    - debug:
-        var: new_inc_request
